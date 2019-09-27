@@ -155,11 +155,12 @@ function _parse_tree() {
     do
         if [[ "${el}" = "${node}" ]]
         then
+            local dep_path="${parent//#/ -> }"
             echo "error: cycle dependencies, dependencies graph:"
             echo ""
-            echo "${parent//\// -> }"
+            echo "${dep_path}"
             local str_len
-            let "str_len = ${#parent} - 6"
+            let "str_len = ${#dep_path} - 6"
             printf "%6s%${str_len}s\n" "^" "|"
 
             cycle_line=""
