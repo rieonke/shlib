@@ -1,6 +1,37 @@
 function core::__loader__::find_deps() {
-    local _exec_file="$1"
-    echo $(grep -E "^\#\!([[:space:]]?)+require" ${_exec_file} | awk 'gsub(/^#!\s+?require\s+?/,"",$0) {print $0}' | uniq )
+    local script="$1"
+
+    local has_grep=0
+    local has_awk=0
+
+    command -v grep > /dev/null 2>&1
+    if [[ $? -eq 0 ]]
+    then
+        has_grep=1
+    fi
+
+    command -v awk > /dev/null 2>&1
+    if [[ $? -eq 0 ]]
+    then
+        has_awk=1
+    fi
+
+    if [[ ${has_grep} -eq 1 && ${has_awk} -eq 1 ]]
+    then
+        echo $(grep -E "^\#\!([[:space:]]?)+require" ${script} | awk 'gsub(/^#!\s+?require\s+?/,"",$0) {print $0}' | uniq )
+    else
+        # 1. read the whole script
+        # 2. parse require she-bang line by line
+
+        regex='(#!([[:space:]]?)+require)[[:space:]]+([a-zA-Z.\/\_`0-9]+)'
+
+        while read line; do
+            if [[ ${line} =~ ${regex} ]]
+            then
+                echo "${BASH_REMATCH[3]}"
+            fi
+        done < ${script}
+    fi
 }
 
 function core::__loader__::get_absolute_path() {
