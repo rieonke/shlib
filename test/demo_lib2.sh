@@ -1,3 +1,3 @@
 function demo_lib2::hello() {
-    echo "hello from demo_lib2"
+  echo "hello from demo_lib2"
 }
