@@ -1,4 +1,4 @@
-#!require array.print
+#!require core.array.print
 
 # @description get bytes actually taken by the string
 # @arg $1 the string

@@ -63,10 +63,10 @@ int main(int argc, char *argv[]) {
     lib_only = true;
   }
 
-  const char *entry_path = "";
+  const char *entry_path_tmp = "";
   if (file->count > 0) {
     const char **entry_paths = file->filename;
-    entry_path = entry_paths[0];
+    entry_path_tmp = entry_paths[0];
   } else {
     fprintf(stderr, "error: missing input file");
     exitcode = 1;
@@ -100,6 +100,7 @@ int main(int argc, char *argv[]) {
     goto exit;
   }
 
+  char* entry_path = realpath(entry_path_tmp, NULL);
 
   // 2. get file content
   if (entry_path == NULL || strlen(entry_path) == 0) {
@@ -108,20 +109,20 @@ int main(int argc, char *argv[]) {
   }
 
   if (!g_file_test(entry_path, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK)) {
-    fprintf(stderr, "error: file %s does not exists!", entry_path);
+    fprintf(stderr, "error: file %s does not exists!\n", entry_path);
     exitcode = 1;
     goto exit;
   }
 
   GNode *tree = NULL;
   if (!sl_build_dependencies_tree(entry_path, NULL, opts, NULL, true, &tree)) {
-    fprintf(stderr, "error: parse dependencies failed");
+    fprintf(stderr, "error: parse dependencies failed\n");
     exitcode = 1;
     goto exit;
   }
 
   if (!sl_build_dependencies_flat(tree, true, NULL, NULL, &list)) {
-    fprintf(stderr, "error: build flat dependencies list failed");
+    fprintf(stderr, "error: build flat dependencies list failed\n");
     exitcode = 1;
     goto exit;
   }
@@ -182,6 +183,9 @@ int main(int argc, char *argv[]) {
   exit:
   if (opts != NULL) {
     sl_free_config_opts(opts);
+  }
+  if (entry_path != NULL) {
+    free(entry_path);
   }
 
   arg_freetable(argtable,

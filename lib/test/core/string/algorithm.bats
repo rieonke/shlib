@@ -3,9 +3,8 @@
 function setup() {
     if [[ -z ${SOURCE_IMPORTED} ]]
     then
-        source ${BATS_TEST_DIRNAME}/../libsh_test_suit.sh
-        libsh_test_init ${BATS_TEST_DIRNAME}/../../string/algorithm.sh
-        #source ${BATS_TEST_DIRNAME}/../../string/algorithm.sh
+        source ${BATS_TEST_DIRNAME}/../../libsh_test_suit.sh
+        libsh_test_init ${BATS_TEST_DIRNAME}/../../../core/string/algorithm.sh
         declare -r SOURCE_IMPORTED=1
     fi
 }

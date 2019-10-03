@@ -22,8 +22,27 @@ if [[ -z ${_ENTRY_} ]] ; then
 fi
 
 _ENTRY_PATH_=$(_file_get_real_path ${_ENTRY_})
+CUR_DIR=$(dirname ${BASH_SOURCE})
 
-for f in $(./bin/shlib -l ${_ENTRY_PATH_})
+
+# 1. find shlib
+if [[ ! -f ~/.local/bin/shlib ]]; then
+    echo "error: shlib executable file not found, please install shlib first"
+    exit
+elif [[ ! -f ${CUR_DIR}/shlib ]]; then
+    echo "ln -s ~/.local/bin/shlib "${CUR_DIR}/shlib""
+    ln -s ~/.local/bin/shlib "${CUR_DIR}/shlib"
+fi
+
+CMD="${CUR_DIR}/shlib -l"
+
+if [[ ! -z ${SHLIB_CONF} ]]; then
+ CMD+=" -C ${SHLIB_CONF}"
+fi
+
+CMD+=" ${_ENTRY_PATH_}"
+
+for f in $(eval "${CMD}")
 do
     source "${f}"
 done
