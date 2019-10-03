@@ -3,7 +3,7 @@
 CURDIR=$(pwd)
 
 # 1. download bin src
-wget -c https://github.com/rieonke/shlib/archive/shlib_bin_0.0.1.tar.gz
+wget -c https://github.com/rieonke/shlib/releases/download/v0.0.1/shlib_bin_0.0.1.tar.gz
 tar xf shlib_bin_0.0.1.tar.gz
 
 # 2. build
