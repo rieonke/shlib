@@ -5,3 +5,4 @@
 bin/third_party
 bin/cmake-build-*
 .vscode
+.DS_Store

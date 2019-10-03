@@ -80,6 +80,12 @@ shlib build tool
 #### 使用脚手架创建项目
 ```bash
 
+# 下载脚手架工具
+wget -c https://raw.githubusercontent.com/rieonke/shlib/master/slcreator.sh
+chmod +x ./slcreator.sh
+
+# 创建项目
+./slcreator.sh hello_world
 
 ```
 

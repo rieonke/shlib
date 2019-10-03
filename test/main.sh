@@ -6,9 +6,6 @@ fi
 
 #!require core.array.print
 
-arr=(hello world shlib)
-#arr+=(abc)
-#arr+=(def)
-#arr+=(ghi)
+arr=(hello world shlib!)
 
 core::array::print_in_comma ${arr[@]}
