@@ -3,19 +3,29 @@ Shell 模块化开发构建尝试
 
 ## 安装
 ### 先决条件
+- cmake
+- gcc
 - glib 2
 ```bash
 # macOS
+brew install cmake
+brew install gcc  #可选，可以使用Xcode 自带的工具链
 brew install glib
 
 # Ubuntu & Debian
+sudo apt install cmake
+sudo apt install build-essential
 sudo apt install libglib2.0-dev
 
 # RedHat & CentOS
-yum -y install glib2-devel
+sudo yum -y install cmake
+sudo yum -y install make gcc glibc-devel
+sudo yum -y install glib2-devel
 
 # Fedora
-dnf install glib2-devel
+sudo dnf install cmake
+sudo dnf install make gcc glibc-devel
+sudo dnf install glib2-devel
 
 ```
 ### 开始安装
