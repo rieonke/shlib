@@ -15,6 +15,9 @@ function core::__loader__::find_deps() {
   fi
 
   if [[ ${has_grep} -eq 1 && ${has_awk} -eq 1 ]]; then
+    if [[ ! -f ${script} ]]; then
+        echo ${script} >& 2
+    fi
     echo $(grep -E "^\#\!([[:space:]]?)+require" ${script} | awk 'gsub(/^#!\s+?require\s+?/,"",$0) {print $0}' | uniq)
   else
     # 1. read the whole script
@@ -111,6 +114,7 @@ function core::__loader__::get_real_lib_path() {
     #        fi
 
     local sd=$(dirname $(core::__loader__::get_absolute_path ${host_script}))
+    #echo "current ${host_script} => ${sd}/${target_lib}" >& 2
     if [[ -f "${sd}/${target_lib}" ]]; then
       core::__loader__::out "${sd}/${target_lib}"
       return 0
@@ -151,6 +155,11 @@ function core::__loader__::get_deps_routines() {
   # 1. find the current node real lib path
   local path
   path=$(core::__loader__::get_real_lib_path ${node} ${libdir} ${entry})
+
+  if [[ ! -f ${path} ]] ; then
+    echo "${path}" >& 2
+    exit 1
+  fi
 
   # 2. check cycle deps
   local parent_arr
