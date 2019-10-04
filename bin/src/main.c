@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
+#include "util.h"
 #include "lib/argtable3.h"
 #include "dependency_resolver.h"
 
@@ -100,7 +101,8 @@ int main(int argc, char *argv[]) {
     goto exit;
   }
 
-  char *entry_path = realpath(entry_path_tmp, NULL);
+  char *entry_path = NULL;
+  expand_absolute_path(entry_path_tmp, &entry_path);
 
   // 2. get file content
   if (entry_path == NULL || strlen(entry_path) == 0) {
@@ -185,9 +187,7 @@ int main(int argc, char *argv[]) {
   if (opts != NULL) {
     sl_free_config_opts(opts);
   }
-  if (entry_path != NULL) {
-    free(entry_path);
-  }
+  FREE_SAFER(entry_path);
 
   arg_freetable(argtable,
                 sizeof(argtable) / sizeof(argtable[0]));

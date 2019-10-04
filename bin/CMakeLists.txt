@@ -11,7 +11,7 @@ include_directories(${GLIB_INCLUDE_DIRS})
 link_directories(${GLIB_LIBRARY_DIRS})
 add_definitions(${GLIB_CFLAGS_OTHER})
 
-set(common_lib src/lib/argtable3.h src/lib/argtable3.c src/lib/ini.h src/lib/ini.c)
+set(common_lib src/lib/argtable3.h src/lib/argtable3.c src/lib/ini.h src/lib/ini.c src/util.h src/util.c)
 add_executable(shlib src/main.c src/dependency_resolver.c src/dependency_resolver.h ${common_lib})
 
 target_link_libraries(shlib glib-2.0 m)

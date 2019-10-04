@@ -12,6 +12,7 @@
 
 typedef struct _sl_resolve_options {
   char *global_search_path;
+  char *shell;
 } sl_resolve_options;
 
 /**

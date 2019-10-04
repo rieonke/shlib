@@ -4,6 +4,7 @@
 
 #include "dependency_resolver.h"
 #include "lib/ini.h"
+#include "util.h"
 #include <glib.h>
 
 #include <errno.h>
@@ -60,17 +61,14 @@ bool sl_resolve_lib_real_path(const char *lib_name,
   }
 
   // 1. absolute path
-  if (g_path_is_absolute(lib_name)) {
+  if (g_path_is_absolute(lib_name) || lib_name[0] == '~') {
 
-    if (g_file_test(lib_name, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK)) {
-      size_t len = strlen(lib_name);
-      *out_path = g_try_malloc0_n(len, sizeof(char));
-      if (*out_path == NULL) {
-        fprintf(stderr, "error: malloc memory failed\n");
-        return false;
-      }
+    char *new_lib_name = NULL;
 
-      strcpy(*out_path, lib_name);
+    expand_absolute_path(lib_name, &new_lib_name);
+
+    if (g_file_test(new_lib_name, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK)) {
+      *out_path = new_lib_name;
       return true; //end here
 
     } else {
@@ -84,14 +82,14 @@ bool sl_resolve_lib_real_path(const char *lib_name,
   if (lib_name[0] == '.') { //todo enhancement
     char *parent_dir = g_path_get_dirname(ref_path);
     char *lib_path = g_build_filename(parent_dir, lib_name, NULL);
-    free(parent_dir);
+    FREE_SAFER(parent_dir);
 
     if (g_file_test(lib_path, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_SYMLINK | G_FILE_TEST_IS_REGULAR)) {
       *out_path = lib_path;
       return true;
     } else {
       fprintf(stderr, "error: [%s] not found, file %s does not exist\n", lib_name, lib_path);
-      free(lib_path);
+      FREE_SAFER(lib_path);
       return false;
     }
   }
@@ -140,8 +138,9 @@ bool _sl_build_dependencies_tree_check_cycle(GNode *parent, char *val, char **pa
   size_t path_len = strlen(val);
   if (*path == NULL) {
     to_free = true;
-    *path = g_malloc0_n(path_len, sizeof(char));
-    strncpy(*path, val, path_len);
+//    *path = g_malloc0_n(path_len, sizeof(char));
+//    strncpy(*path, val, path_len);
+    STR_APPEND(*path, val);
   }
 
   while (p != NULL) {
@@ -160,6 +159,8 @@ bool _sl_build_dependencies_tree_check_cycle(GNode *parent, char *val, char **pa
 
     p = p->parent;
   }
+
+  STR_APPEND_END(*path);
 
   if (!found && to_free) {
     free(*path);
@@ -257,7 +258,7 @@ bool sl_scan_dependencies(const char *entry_path, GList **out_list) {
   GRegex *regex;
   GMatchInfo *match_info;
 
-  regex = g_regex_new("(#!([[:space:]]?)+require)[[:space:]]+([a-zA-Z.\\/\\_`0-9]+)", 0, 0, NULL);
+  regex = g_regex_new("(#!([[:space:]]?)+require)[[:space:]]+(\\~?[a-zA-Z.\\/\\_`0-9]+)", 0, 0, NULL);
   g_regex_match(regex, buf, 0, &match_info);
   while (g_match_info_matches(match_info)) {
     gchar *word = g_match_info_fetch(match_info, 3);
@@ -273,7 +274,7 @@ bool sl_scan_dependencies(const char *entry_path, GList **out_list) {
 }
 
 gboolean _sl_free_dependencies_tree(GNode *node, gpointer data) {
-  free(node->data);
+  FREE_SAFER(node->data);
   return false;
 }
 
@@ -356,6 +357,8 @@ static int handler(void *opts, const char *section, const char *name, const char
 
   if (MATCH("lib", "global_search_dir")) {
     (*pconfig)->global_search_path = strdup(value);
+  } else if (MATCH("runtime", "shell")) {
+    (*pconfig)->shell = strdup(value);
   } else {
     return 0;
   }
@@ -369,6 +372,7 @@ bool sl_parse_config_opts(const char *config_path, sl_resolve_options **out) {
 
   if (ini_parse(config_path, handler, out) < 0) {
     fprintf(stderr, "error: cannot load config file %s \n", config_path);
+    sl_free_config_opts(*out);
     return false;
   }
   return true;
@@ -376,7 +380,9 @@ bool sl_parse_config_opts(const char *config_path, sl_resolve_options **out) {
 
 bool sl_free_config_opts(sl_resolve_options *opts) {
 
-  free(opts->global_search_path);
+  FREE_SAFER(opts->global_search_path);
+  FREE_SAFER(opts->shell);
+
   free(opts);
 
   return true;
