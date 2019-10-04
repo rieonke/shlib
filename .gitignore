@@ -2,6 +2,8 @@
 .build_*.sh
 *.swp
 .idea
+cmake-build-*
+build
 bin/third_party
 bin/cmake-build-*
 .vscode

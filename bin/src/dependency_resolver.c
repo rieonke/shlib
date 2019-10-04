@@ -6,6 +6,9 @@
 #include "lib/ini.h"
 #include <glib.h>
 
+#include <errno.h>
+#include <string.h>
+
 struct result {
   bool status;
   bool expanded;
@@ -37,7 +40,7 @@ bool sl_resolve_lib_real_path(const char *lib_name,
     /* Open the command for reading. */
     fp = popen(buf, "r");
     if (fp == NULL) {
-      printf("Failed to run command\n");
+      fprintf(stderr, "Failed to run command\n");
       return false;
     }
 
@@ -63,6 +66,7 @@ bool sl_resolve_lib_real_path(const char *lib_name,
       size_t len = strlen(lib_name);
       *out_path = g_try_malloc0_n(len, sizeof(char));
       if (*out_path == NULL) {
+        fprintf(stderr, "error: malloc memory failed\n");
         return false;
       }
 
@@ -70,6 +74,7 @@ bool sl_resolve_lib_real_path(const char *lib_name,
       return true; //end here
 
     } else {
+      fprintf(stderr, "error: [%s] not found, file %s does not exist\n", lib_name, lib_name);
       return false; //end here
     }
 
@@ -85,6 +90,7 @@ bool sl_resolve_lib_real_path(const char *lib_name,
       *out_path = lib_path;
       return true;
     } else {
+      fprintf(stderr, "error: [%s] not found, file %s does not exist\n", lib_name, lib_path);
       free(lib_path);
       return false;
     }
@@ -116,6 +122,7 @@ bool sl_resolve_lib_real_path(const char *lib_name,
       *out_path = lib_path;
       return true;
     } else {
+      fprintf(stderr, "error: [%s] not found, file %s does not exist\n", lib_name, lib_path);
       free(lib_path);
       return false;
     }
@@ -124,6 +131,43 @@ bool sl_resolve_lib_real_path(const char *lib_name,
 
   return false;
 }
+
+bool _sl_build_dependencies_tree_check_cycle(GNode *parent, char *val, char **path) {
+
+  GNode *p = parent;
+  bool found = false;
+  bool to_free = false;
+  size_t path_len = strlen(val);
+  if (*path == NULL) {
+    to_free = true;
+    *path = g_malloc0_n(path_len, sizeof(char));
+    strncpy(*path, val, path_len);
+  }
+
+  while (p != NULL) {
+
+    // append path
+    if (p->data != NULL && val != NULL) {
+      path_len += strlen(p->data) + 4;
+      *path = g_realloc_n(*path, path_len, sizeof(char));
+      strncat(*path, " <= ", 4);
+      strncat(*path, p->data, strlen(p->data));
+    }
+
+    if (p->data != NULL && val != NULL && g_strcmp0(p->data, val) == 0) {
+      found = true;
+    }
+
+    p = p->parent;
+  }
+
+  if (!found && to_free) {
+    free(*path);
+  }
+
+  return found;
+}
+
 bool sl_build_dependencies_tree(const char *entry_path,
                                 const char *ref_path,
                                 const sl_resolve_options *opts,
@@ -140,6 +184,15 @@ bool sl_build_dependencies_tree(const char *entry_path,
   new_entry_path = g_malloc0_n(strlen(entry_path) + 1, sizeof(char));
   strncpy(new_entry_path, entry_path, strlen(entry_path));
 
+  char *cycle_path = NULL;
+  if (_sl_build_dependencies_tree_check_cycle(parent, expand ? real_path : new_entry_path, &cycle_path)) {
+    fprintf(stderr, "error: cycle dependencies, path [ %s ]\n", cycle_path);
+    free(new_entry_path);
+    free(cycle_path);
+    free(real_path);
+    return false;
+  }
+
   GNode *node;
 
   if (expand) {
@@ -147,6 +200,8 @@ bool sl_build_dependencies_tree(const char *entry_path,
   } else {
     node = g_node_new(new_entry_path);
   }
+
+  // check cycle dependencies
 
   if (*out_tree == NULL) {
     *out_tree = node;
@@ -163,12 +218,10 @@ bool sl_build_dependencies_tree(const char *entry_path,
   if (sl_scan_dependencies(real_path, &list) && list != NULL) {
     size_t list_len = g_list_length(list);
     if (list_len > 0) { // has dependencies
+
       for (size_t i = 0; i < list_len; ++i) {
         char *dep = (char *) g_list_nth_data(list, i);
-      }
-      for (size_t i = 0; i < list_len; ++i) {
-        char *dep = (char *) g_list_nth_data(list, i);
-        sl_build_dependencies_tree(dep, real_path, opts, node, expand, out_tree);
+        sl_build_dependencies_tree(dep, real_path, opts, node, expand, out_tree); //todo error handling
         free(dep);
       }
 
@@ -226,9 +279,12 @@ gboolean _sl_free_dependencies_tree(GNode *node, gpointer data) {
 
 bool sl_free_dependencies_tree(GNode *tree) {
 
-  g_node_traverse(tree, G_POST_ORDER, G_TRAVERSE_ALL, -1, _sl_free_dependencies_tree, NULL);
+  if (tree != NULL) {
 
-  g_node_destroy(tree);
+    g_node_traverse(tree, G_POST_ORDER, G_TRAVERSE_ALL, -1, _sl_free_dependencies_tree, NULL);
+
+    g_node_destroy(tree);
+  }
   return true;
 
 }
@@ -312,7 +368,7 @@ bool sl_parse_config_opts(const char *config_path, sl_resolve_options **out) {
   *out = g_malloc0(sizeof(sl_resolve_options));
 
   if (ini_parse(config_path, handler, out) < 0) {
-    fprintf(stderr,"error: cannot load config file \n");
+    fprintf(stderr, "error: cannot load config file %s \n", config_path);
     return false;
   }
   return true;

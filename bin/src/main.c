@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
     goto exit;
   }
 
-  char* entry_path = realpath(entry_path_tmp, NULL);
+  char *entry_path = realpath(entry_path_tmp, NULL);
 
   // 2. get file content
   if (entry_path == NULL || strlen(entry_path) == 0) {
@@ -116,6 +116,7 @@ int main(int argc, char *argv[]) {
 
   GNode *tree = NULL;
   if (!sl_build_dependencies_tree(entry_path, NULL, opts, NULL, true, &tree)) {
+    sl_free_dependencies_tree(tree);
     fprintf(stderr, "error: parse dependencies failed\n");
     exitcode = 1;
     goto exit;
