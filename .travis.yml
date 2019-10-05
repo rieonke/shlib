@@ -43,7 +43,19 @@ matrix:
             - cmake-data
             - cmake
             - libglib2.0-dev
+    # macOS
+    - os: osx
+      osx_image: xcode8
+      env:
+        - MATRIX_EVAL="brew install glib"
 
+    - os: osx
+      osx_image: xcode9
+      env:
+        - MATRIX_EVAL="brew install glib"
+
+before_script:
+  - eval "${MATRIX_EVAL}"
 script:
   - mkdir build && cd build
   - cmake ..
