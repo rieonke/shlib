@@ -1,0 +1,51 @@
+language: c
+
+matrix:
+  include:
+    # Ubuntu trusty
+    - os: linux
+      dist: trusty
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc
+            - g++
+            - cmake-data
+            - cmake
+            - libglib2.0-dev
+
+    # Ubuntu xenial
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc
+            - g++
+            - cmake-data
+            - cmake
+            - libglib2.0-dev
+
+    # Ubuntu bionic
+    - os: linux
+      dist: bionic
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++
+            - gcc
+            - cmake-data
+            - cmake
+            - libglib2.0-dev
+
+script:
+  - mkdir build && cd build
+  - cmake ..
+  - make -j 2
+  - SHLIB_PATH="$(pwd)/lib" ctest
