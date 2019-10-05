@@ -47,22 +47,22 @@ matrix:
     - os: osx
       osx_image: xcode8.3
       env:
-        - MATRIX_EVAL="brew install glib"
+        - MATRIX_EVAL="brew reinstall glib"
 
     - os: osx
       osx_image: xcode9.4
       env:
-        - MATRIX_EVAL="brew install glib"
+        - MATRIX_EVAL="brew reinstall glib"
 
     - os: osx
       osx_image: xcode10.3
       env:
-        - MATRIX_EVAL="brew install glib"
+        - MATRIX_EVAL="brew reinstall glib"
 
     - os: osx
       osx_image: xcode11
       env:
-        - MATRIX_EVAL="brew install glib"
+        - MATRIX_EVAL="brew reinstall glib"
 before_script:
   - eval "${MATRIX_EVAL}"
 script:
