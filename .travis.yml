@@ -48,4 +48,4 @@ script:
   - mkdir build && cd build
   - cmake ..
   - make -j 2
-  - SHLIB_PATH="$(pwd)/lib" ctest
+  - SHLIB_PATH="$(pwd)/../lib" ctest
