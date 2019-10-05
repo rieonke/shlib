@@ -1,6 +1,8 @@
 # shlib
 Shell 模块化开发构建尝试
 
+[![Build Status](https://travis-ci.com/rieonke/shlib.svg?branch=master)](https://travis-ci.com/rieonke/shlib)
+
 ## 安装
 ### 先决条件
 - cmake
