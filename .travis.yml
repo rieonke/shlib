@@ -1,0 +1,72 @@
+language: c
+
+matrix:
+  include:
+    # Ubuntu trusty
+    - os: linux
+      dist: trusty
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc
+            - g++
+            - cmake-data
+            - cmake
+            - libglib2.0-dev
+
+    # Ubuntu xenial
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc
+            - g++
+            - cmake-data
+            - cmake
+            - libglib2.0-dev
+
+    # Ubuntu bionic
+    - os: linux
+      dist: bionic
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++
+            - gcc
+            - cmake-data
+            - cmake
+            - libglib2.0-dev
+    # macOS
+    - os: osx
+      osx_image: xcode8.3
+      env:
+        - MATRIX_EVAL="brew reinstall glib"
+
+    - os: osx
+      osx_image: xcode9.4
+      env:
+        - MATRIX_EVAL="brew reinstall glib"
+
+    - os: osx
+      osx_image: xcode10.3
+      env:
+        - MATRIX_EVAL="brew reinstall glib"
+
+    - os: osx
+      osx_image: xcode11
+      env:
+        - MATRIX_EVAL="brew reinstall glib"
+before_script:
+  - eval "${MATRIX_EVAL}"
+script:
+  - mkdir build && cd build
+  - cmake ..
+  - make -j 2
+  - SHLIB_PATH="$(pwd)/../lib" ctest

@@ -5,6 +5,7 @@ if [ -z "${SHLIB_RELEASE}" ]; then
 fi
 
 #!require core.array.print
+#!require ./demo_lib.sh
 
 arr=(hello world shlib!)
 
