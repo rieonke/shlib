@@ -23,9 +23,9 @@ add_executable(test_dependency_resolver_relative ${test_common_files} src/test/t
 add_executable(test_dependency_resolver_absolute ${test_common_files} src/test/test_dependency_resolver_absolute.c)
 add_executable(test_dependency_resolver_named ${test_common_files} src/test/test_dependency_resolver_named.c)
 
-target_link_libraries(test_dependency_resolver_relative glib-2.0 iconv intl)
-target_link_libraries(test_dependency_resolver_absolute glib-2.0 iconv intl)
-target_link_libraries(test_dependency_resolver_named glib-2.0 iconv intl)
+target_link_libraries(test_dependency_resolver_relative glib-2.0 m)
+target_link_libraries(test_dependency_resolver_absolute glib-2.0 m)
+target_link_libraries(test_dependency_resolver_named glib-2.0 m)
 
 add_test(test_dependency_resolver_relative test_dependency_resolver_relative)
 add_test(test_dependency_resolver_absolute test_dependency_resolver_absolute)
