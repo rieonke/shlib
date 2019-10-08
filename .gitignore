@@ -6,5 +6,7 @@ cmake-build-*
 build
 bin/third_party
 bin/cmake-build-*
+bin/static/archives/*.tar.gz
+bin/static/archives/*.zip
 .vscode
 .DS_Store
