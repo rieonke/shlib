@@ -79,6 +79,12 @@ target_link_libraries(test_dependency_resolver_relative ${COMMON_LINK_LIBS})
 target_link_libraries(test_dependency_resolver_absolute ${COMMON_LINK_LIBS})
 target_link_libraries(test_dependency_resolver_named ${COMMON_LINK_LIBS})
 
+if (${BUILD_STATIC})
+    add_dependencies(test_dependency_resolver_relative glib)
+    add_dependencies(test_dependency_resolver_absolute glib)
+    add_dependencies(test_dependency_resolver_named glib)
+endif ()
+
 add_test(test_dependency_resolver_relative test_dependency_resolver_relative)
 add_test(test_dependency_resolver_absolute test_dependency_resolver_absolute)
 add_test(test_dependency_resolver_named test_dependency_resolver_named)

@@ -8,7 +8,7 @@ ExternalProject_Add(
         BUILD_ALWAYS OFF
         BUILD_IN_SOURCE 1
         CONFIGURE_COMMAND ./configure --prefix=${3RD_LIB_DIR}/build --enable-shared=false
-        BUILD_COMMAND make -j 4
+        BUILD_COMMAND make -j $(nproc)
         INSTALL_COMMAND make install
         COMMAND cd  ${3RD_LIB_DIR}/build/lib/libffi-3.2.1/ && cp -rf include ../../ #find ${3RD_LIB_DIR}/build/lib/libffi-3.2.1/include/ -name "*.h" | xargs -0 -I{} cp {} ${3RD_LIB_DIR}/build/include
 )
