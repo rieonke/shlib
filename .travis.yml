@@ -17,12 +17,10 @@ matrix:
             - cmake
             - libglib2.0-dev
             - python3.7
-            - python3-pip
-            - python3-setuptools
             - ninja-build
             - libmount-dev
       env:
-        - MATRIX_EVAL="sudo apt-get remove python3.4"
+        - MATRIX_EVAL="sudo apt-get remove python3.4 python3.6 && sudo apt-get autoremove && python3.7 -m pip install pip"
 
     # Ubuntu xenial
     - os: linux
