@@ -4,14 +4,14 @@ project(shlib)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 11)
 
-option(BUILD_STATIC "Build static shlib" OFF)
+option(BUILD_STATIC "Build static shlib" ON)
 
 find_package(PkgConfig)
 pkg_check_modules(GLIB glib-2.0)
 
 if (${GLIB_FOUND})
     message("-- Glib found")
-else()
+else ()
     message("-- No Glib found, set build static on")
     set(BUILD_STATIC ON)
 endif ()
@@ -50,7 +50,10 @@ add_definitions(${GLIB_CFLAGS_OTHER})
 
 set(common_lib src/lib/argtable3.h src/lib/argtable3.c src/lib/ini.h src/lib/ini.c src/util.h src/util.c)
 add_executable(shlib src/main.c src/dependency_resolver.c src/dependency_resolver.h ${common_lib})
-add_dependencies(shlib glib)
+
+if (${BUILD_STATIC})
+    add_dependencies(shlib glib)
+endif ()
 
 list(APPEND COMMON_LINK_LIBS "m")
 
