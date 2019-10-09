@@ -9,17 +9,18 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
+            - deadsnakes
           packages:
             - gcc
             - g++
             - cmake-data
             - cmake
             - libglib2.0-dev
-            - python3
+            - python3.6
             - python3-pip
             - ninja-build
       env:
-        - MATRIX_EVAL="pip3 install --user meson"
+        - MATRIX_EVAL="pip3 install --user --upgrade pip setuptools wheel meson"
 
     # Ubuntu xenial
     - os: linux
@@ -38,7 +39,7 @@ matrix:
             - python3-pip
             - ninja-build
       env:
-        - MATRIX_EVAL="pip3 install --user meson"
+        - MATRIX_EVAL="pip3 install --user --upgrade pip setuptools wheel meson"
 
     # Ubuntu bionic
     - os: linux
@@ -57,7 +58,7 @@ matrix:
             - python3-pip
             - ninja-build
       env:
-        - MATRIX_EVAL="pip3 install --user meson"
+        - MATRIX_EVAL="pip3 install --user --upgrade pip setuptools wheel meson"
     # macOS
     - os: osx
       osx_image: xcode8.3
