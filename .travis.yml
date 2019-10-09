@@ -63,7 +63,7 @@ matrix:
     - os: osx
       osx_image: xcode8.3
       env:
-        - MATRIX_EVAL="brew reinstall glib ninja python"
+        - MATRIX_EVAL="brew reinstall glib ninja python@3 python"
 
     - os: osx
       osx_image: xcode9.4
