@@ -16,7 +16,7 @@ matrix:
             - cmake-data
             - cmake
             - libglib2.0-dev
-            - python3.6
+            - python3.7
             - python3-pip
             - python3-setuptools
             - ninja-build
