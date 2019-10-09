@@ -15,6 +15,11 @@ matrix:
             - cmake-data
             - cmake
             - libglib2.0-dev
+            - python3
+            - python3-pip
+            - ninja-build
+      env:
+        - MATRIX_EVAL="pip3 install --user meson"
 
     # Ubuntu xenial
     - os: linux
@@ -29,6 +34,11 @@ matrix:
             - cmake-data
             - cmake
             - libglib2.0-dev
+            - python3
+            - python3-pip
+            - ninja-build
+      env:
+        - MATRIX_EVAL="pip3 install --user meson"
 
     # Ubuntu bionic
     - os: linux
@@ -43,26 +53,31 @@ matrix:
             - cmake-data
             - cmake
             - libglib2.0-dev
+            - python3
+            - python3-pip
+            - ninja-build
+      env:
+        - MATRIX_EVAL="pip3 install --user meson"
     # macOS
     - os: osx
       osx_image: xcode8.3
       env:
-        - MATRIX_EVAL="brew reinstall glib"
+        - MATRIX_EVAL="brew reinstall glib meson ninja"
 
     - os: osx
       osx_image: xcode9.4
       env:
-        - MATRIX_EVAL="brew reinstall glib"
+        - MATRIX_EVAL="brew reinstall glib meson ninja"
 
     - os: osx
       osx_image: xcode10.3
       env:
-        - MATRIX_EVAL="brew reinstall glib"
+        - MATRIX_EVAL="brew reinstall glib meson ninja"
 
     - os: osx
       osx_image: xcode11
       env:
-        - MATRIX_EVAL="brew reinstall glib"
+        - MATRIX_EVAL="brew reinstall glib meson ninja"
 before_script:
   - eval "${MATRIX_EVAL}"
 script:
