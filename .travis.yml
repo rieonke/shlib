@@ -18,9 +18,10 @@ matrix:
             - libglib2.0-dev
             - python3.6
             - python3-pip
+            - python3-setuptools
             - ninja-build
       env:
-        - MATRIX_EVAL="pip3 install --user --upgrade pip setuptools wheel meson"
+        - MATRIX_EVAL="sudo apt-get remove python3.4"
 
     # Ubuntu xenial
     - os: linux
@@ -37,9 +38,8 @@ matrix:
             - libglib2.0-dev
             - python3
             - python3-pip
+            - python3-setuptools
             - ninja-build
-      env:
-        - MATRIX_EVAL="pip3 install --user --upgrade pip setuptools wheel meson"
 
     # Ubuntu bionic
     - os: linux
@@ -56,31 +56,32 @@ matrix:
             - libglib2.0-dev
             - python3
             - python3-pip
+            - python3-setuptools
             - ninja-build
-      env:
-        - MATRIX_EVAL="pip3 install --user --upgrade pip setuptools wheel meson"
     # macOS
     - os: osx
       osx_image: xcode8.3
       env:
-        - MATRIX_EVAL="brew reinstall glib meson ninja"
+        - MATRIX_EVAL="brew reinstall glib ninja"
 
     - os: osx
       osx_image: xcode9.4
       env:
-        - MATRIX_EVAL="brew reinstall glib meson ninja"
+        - MATRIX_EVAL="brew reinstall glib ninja"
 
     - os: osx
       osx_image: xcode10.3
       env:
-        - MATRIX_EVAL="brew reinstall glib meson ninja"
+        - MATRIX_EVAL="brew reinstall glib ninja"
 
     - os: osx
       osx_image: xcode11
       env:
-        - MATRIX_EVAL="brew reinstall glib meson ninja"
+        - MATRIX_EVAL="brew reinstall glib ninja"
 before_script:
   - eval "${MATRIX_EVAL}"
+  - pip3 install --user --upgrade pip setuptools wheel
+  - pip3 install --user --upgrade meson
 script:
   - mkdir build && cd build
   - cmake ..
