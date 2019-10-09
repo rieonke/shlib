@@ -8,7 +8,7 @@ ExternalProject_Add(
         BUILD_ALWAYS OFF
         BUILD_IN_SOURCE 1
         PATCH_COMMAND patch -p0 --forward ${3RD_LIB_DIR}/glib/src/glib/meson.build < ${CMAKE_CURRENT_SOURCE_DIR}/static/glib_meson_build.patch || true
-        CONFIGURE_COMMAND PKG_CONFIG_PATH=${3RD_LIB_DIR}/build/lib/pkgconfig meson  --default-library=static -Dinternal_pcre=true -Dman=false --prefix=${3RD_LIB_DIR}/build --libdir=lib --includedir=include _build
+        CONFIGURE_COMMAND PKG_CONFIG_PATH=${3RD_LIB_DIR}/build/lib/pkgconfig meson  --default-library=static -Dinternal_pcre=true -Dman=false -Dlibmount=false --prefix=${3RD_LIB_DIR}/build --libdir=lib --includedir=include _build
         BUILD_COMMAND ninja -C _build
         INSTALL_COMMAND ninja -C _build install
 )
