@@ -28,6 +28,7 @@ if (${BUILD_STATIC})
     include(static/ExternalProjectGettext.cmake)
     include(static/ExternalProjectGlib.cmake)
     include(static/ExternalProjectLibffi.cmake)
+    include(static/ExternalProjectZlib.cmake)
 
     include_directories(${3RD_LIB_DIR}/build/lib/glib-2.0/include)
     include_directories(${3RD_LIB_DIR}/build/include/glib-2.0)
@@ -42,6 +43,9 @@ if (${BUILD_STATIC})
     SET(BUILD_SHARED_LIBS OFF)
     #SET(CMAKE_EXE_LINKER_FLAGS "-static")
     list(APPEND COMMON_LINK_LIBS "intl")
+
+    find_package(PkgConfig)
+    pkg_check_modules(GLIB glib-2.0)
 endif ()
 
 include_directories(${GLIB_INCLUDE_DIRS})
