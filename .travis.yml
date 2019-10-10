@@ -18,9 +18,12 @@ matrix:
             - python3.6
             - curl
             - libglib2.0-dev
+            - pkg-config
+            - wget
+            - unzip
             - ninja-build
       env:
-        - MATRIX_EVAL="curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && sudo python3.6 get-pip.py && alias pip3=pip3.6"
+        - MATRIX_EVAL="curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && sudo python3.6 get-pip.py && alias pip3=pip3.6 && wget https://github.com/ninja-build/ninja/releases/download/v1.9.0/ninja-linux.zip && sudo unzip ninja-linux.zip -d /usr/bin"
 
     # Ubuntu xenial
     - os: linux
@@ -35,6 +38,7 @@ matrix:
             - cmake-data
             - cmake
             - libglib2.0-dev
+            - pkg-config
             - python3
             - python3-pip
             - python3-setuptools
@@ -53,6 +57,7 @@ matrix:
             - cmake-data
             - cmake
             - libglib2.0-dev
+            - pkg-config
             - python3
             - python3-pip
             - python3-setuptools
