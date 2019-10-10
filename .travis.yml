@@ -9,16 +9,18 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
+            - deadsnakes
           packages:
             - gcc
             - g++
             - cmake-data
             - cmake
-            - libglib2.0-dev
             - python3.6
+            - curl
+            - libglib2.0-dev
             - ninja-build
       env:
-        - MATRIX_EVAL="sudo apt-get remove python3.4 && sudo apt-get autoremove && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && sudo python3 get-pip.py"
+        - MATRIX_EVAL="curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && sudo python3.6 get-pip.py && alias pip3=pip3.6"
 
     # Ubuntu xenial
     - os: linux
