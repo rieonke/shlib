@@ -19,7 +19,7 @@ matrix:
             - python3.7
             - ninja-build
       env:
-        - MATRIX_EVAL="sudo apt-get remove python3.4 python3.6 && sudo apt-get autoremove && python3.7 -m pip install pip"
+        - MATRIX_EVAL="sudo apt-get remove python3.4 python3.6 && sudo apt-get autoremove && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py"
 
     # Ubuntu xenial
     - os: linux
