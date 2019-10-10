@@ -22,7 +22,7 @@ matrix:
             - wget
             - unzip
       env:
-        - MATRIX_EVAL="curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && sudo python3.6 get-pip.py && alias pip3=pip3.6 && .ci/build_ninja.sh"
+        - MATRIX_EVAL="curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && sudo python3.6 get-pip.py && alias pip3=pip3.6 && sh .ci/build_ninja.sh"
 
     # Ubuntu xenial
     - os: linux
