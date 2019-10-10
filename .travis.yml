@@ -77,8 +77,8 @@ matrix:
         - MATRIX_EVAL="brew reinstall glib ninja python"
 before_script:
   - eval "${MATRIX_EVAL}"
-  - sudo pip3 install --user --upgrade pip setuptools wheel
-  - sudo pip3 install --user --upgrade meson
+  - sudo pip3 install --upgrade pip setuptools wheel
+  - sudo pip3 install --upgrade meson
 script:
   - mkdir build && cd build
   - cmake ..
