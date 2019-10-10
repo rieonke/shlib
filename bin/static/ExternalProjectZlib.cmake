@@ -7,7 +7,7 @@ ExternalProject_Add(
 #        PREFIX ${3RD_LIB_DIR}/libffi
         BUILD_ALWAYS OFF
         BUILD_IN_SOURCE 1
-        CONFIGURE_COMMAND ./configure --prefix=${3RD_LIB_DIR}/build --static
+        CONFIGURE_COMMAND CFLAGS=-fPIC ./configure --prefix=${3RD_LIB_DIR}/build --static
         BUILD_COMMAND make -j $(nproc)
         INSTALL_COMMAND make install
 )

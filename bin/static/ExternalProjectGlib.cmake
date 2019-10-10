@@ -13,4 +13,5 @@ ExternalProject_Add(
         INSTALL_COMMAND ninja -C _build install
 )
 
+#add_dependencies(glib libffi gettext)
 add_dependencies(glib zlib libffi gettext)
