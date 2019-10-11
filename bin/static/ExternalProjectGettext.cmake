@@ -8,7 +8,7 @@ ExternalProject_Add(
         BUILD_ALWAYS OFF
         #BUILD_IN_SOURCE OFF
         BINARY_DIR ${3RD_LIB_DIR}/gettext/src/gettext/gettext-runtime
-        CONFIGURE_COMMAND CFLAGS=-fPIC ../gettext/configure --disable-dependency-tracking  --disable-silent-rules gl_cv_func_ftello_works=yes --disable-debug  --with-included-gettext  --enable-shared=false --enable-static  --disable-java  --disable-csharp  --prefix=${3RD_LIB_DIR}/build #CXXFLAGS=-fPIC
+        CONFIGURE_COMMAND CFLAGS=-fPIC ./configure --disable-dependency-tracking  --disable-silent-rules gl_cv_func_ftello_works=yes --disable-debug  --with-included-gettext  --enable-shared=false --enable-static  --disable-java  --disable-csharp  --prefix=${3RD_LIB_DIR}/build #CXXFLAGS=-fPIC
         BUILD_COMMAND make clean && make -j $(nproc)
         INSTALL_COMMAND make install
         COMMAND mkdir -p ${3RD_LIB_DIR}/build/lib/pkgconfig && echo "prefix=${3RD_LIB_DIR}/build \\n libdir=\${prefix}/lib \\n includedir=\${prefix}/include \\n\\n Name: intl \\n Description: Gettext \\n Version: 0.20.1 \\n Libs: -L\${libdir} -lintl \\n Cflags: -I\${includedir} \\n " > ${3RD_LIB_DIR}/build/lib/pkgconfig/libintl.pc
