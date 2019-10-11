@@ -31,13 +31,3 @@
 +#endif
  
  glib_conf.set('HAVE_BIND_TEXTDOMAIN_CODESET', have_bind_textdomain_codeset)
- 
-@@ -1994,7 +1995,7 @@
- subdir('gmodule')
- subdir('gio')
- subdir('fuzzing')
--subdir('tests')
-+#subdir('tests')
- 
- # xgettext is optional (on Windows for instance)
- if find_program('xgettext', required : get_option('nls')).found()
