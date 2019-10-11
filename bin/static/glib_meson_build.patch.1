@@ -1,0 +1,24 @@
+--- ./meson.build	2019-09-02 21:25:55.000000000 +0800
++++ ./meson.build	2019-10-06 02:42:58.000000000 +0800
+@@ -1789,14 +1789,15 @@
+   libintl = []
+   have_bind_textdomain_codeset = cc.has_function('bind_textdomain_codeset')
+ else
+-  libintl = cc.find_library('intl', required : false)
+-  if not libintl.found()
+-    libintl = subproject('proxy-libintl').get_variable('intl_dep')
+-    have_bind_textdomain_codeset = true  # proxy-libintl supports it
+-  else
++  #libintl = cc.find_library('intl', required : true)
++  libintl = dependency('libintl')
++  #if not libintl.found()
++  #  libintl = subproject('proxy-libintl').get_variable('intl_dep')
++  #  have_bind_textdomain_codeset = true  # proxy-libintl supports it
++  #else
+     have_bind_textdomain_codeset = cc.has_function('bind_textdomain_codeset',
+                                                    dependencies : libintl)
+-  endif
++  #endif
+ endif
+ 
+ glib_conf.set('HAVE_BIND_TEXTDOMAIN_CODESET', have_bind_textdomain_codeset)

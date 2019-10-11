@@ -1,0 +1,8 @@
+--- meson.build1	2019-10-10 18:16:28.000000000 +0800
++++ meson.build	2019-10-10 18:16:34.000000000 +0800
+@@ -994,4 +994,4 @@
+ endif
+ 
+ subdir('fam')
+-subdir('tests')
++#subdir('tests')

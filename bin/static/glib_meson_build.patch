@@ -1,0 +1,33 @@
+--- ../meson.build	2019-10-10 17:48:10.000000000 +0800
++++ ./meson.build	2019-10-10 17:48:59.000000000 +0800
+@@ -1785,19 +1785,20 @@
+ # proxy-libintl subproject.
+ # FIXME: glib-gettext.m4 has much more checks to detect broken/uncompatible
+ # implementations. This could be extended if issues are found in some platforms.
+-if cc.has_function('ngettext')
+-  libintl = []
+-  have_bind_textdomain_codeset = cc.has_function('bind_textdomain_codeset')
+-else
+-  libintl = cc.find_library('intl', required : false)
+-  if not libintl.found()
+-    libintl = subproject('proxy-libintl').get_variable('intl_dep')
+-    have_bind_textdomain_codeset = true  # proxy-libintl supports it
+-  else
++#if cc.has_function('ngettext')
++#  libintl = []
++#  have_bind_textdomain_codeset = cc.has_function('bind_textdomain_codeset')
++#else
++  #libintl = cc.find_library('intl', required : false)
++  libintl = dependency('libintl')
++  #if not libintl.found()
++  #  libintl = subproject('proxy-libintl').get_variable('intl_dep')
++  #  have_bind_textdomain_codeset = true  # proxy-libintl supports it
++  #else
+     have_bind_textdomain_codeset = cc.has_function('bind_textdomain_codeset',
+                                                    dependencies : libintl)
+-  endif
+-endif
++  #endif
++#endif
+ 
+ glib_conf.set('HAVE_BIND_TEXTDOMAIN_CODESET', have_bind_textdomain_codeset)
