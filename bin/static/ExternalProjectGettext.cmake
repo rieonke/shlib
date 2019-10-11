@@ -1,6 +1,6 @@
 ExternalProject_Add(
         gettext
-        URL https://mirrors.tuna.tsinghua.edu.cn/gnu/gettext/gettext-0.20.1.tar.gz
+        URL https://ftp.gnu.org/pub/gnu/gettext/gettext-0.20.1.tar.gz
         URL_HASH SHA256=66415634c6e8c3fa8b71362879ec7575e27da43da562c798a8a2f223e6e47f5c
         DOWNLOAD_NAME gettext-0.20.1.tar.gz
         DOWNLOAD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/static/archives
